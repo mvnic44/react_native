@@ -58,17 +58,20 @@ interface JobCardProps {
 
 const JobCard = ({ job }: JobCardProps): ReactElement => {
   const [ref, visible] = useReveal()
-  const accent = job.current ? 'var(--cyan)' : 'rgba(255,255,255,0.25)'
+  // Border/marker accent can stay a neutral divider color for past roles.
+  const borderAccent = job.current ? 'var(--cyan)' : 'var(--line)'
+  // Text accent must always meet contrast against the panel background in both themes.
+  const textAccent = job.current ? 'var(--cyan)' : 'var(--text-faint)'
   return (
     <div
       ref={ref}
       className={`reveal glass-panel corner-accent ${visible ? 'in' : ''}`}
-      style={{ ...styles.card, borderLeft: `2px solid ${accent}` }}
+      style={{ ...styles.card, borderLeft: `2px solid ${borderAccent}` }}
     >
-      <div style={{ ...styles.marker, background: accent }} />
+      <div style={{ ...styles.marker, background: borderAccent }} />
       <div style={styles.top}>
         <div>
-          <span style={{ ...styles.timestamp, color: accent }}>{job.period}</span>
+          <span style={{ ...styles.timestamp, color: textAccent }}>{job.period}</span>
           <h3 style={styles.role}>{job.role}</h3>
           <p style={styles.company}>@ {job.company}</p>
         </div>
@@ -77,7 +80,7 @@ const JobCard = ({ job }: JobCardProps): ReactElement => {
       <ul style={styles.points}>
         {job.points.map((p, i) => (
           <li key={i} style={styles.point}>
-            <span style={{ color: accent, fontFamily: 'var(--font-mono)', marginRight: 10 }}>&gt;</span>{p}
+            <span style={{ color: textAccent, fontFamily: 'var(--font-mono)', marginRight: 10 }}>&gt;</span>{p}
           </li>
         ))}
       </ul>
